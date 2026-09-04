@@ -6,7 +6,7 @@ I previously used [balintbarna's version](https://github.com/balintbarna/gnome-s
 
 ## Description
 Using **Fixed number of workspaces** options, Workspace 1 is reserved for Files and other small, non-maximized windows.
-When a window is maximized—or an application opens already maximized—it moves to its own empty workspace, starting at workspace 2. Restoring the window moves it back to the workspace it came from.
+When a window is maximized—or an application opens already maximized—it moves to its own empty workspace, starting at workspace 2. Restoring the window moves it back to the workspace it came from. Presently only works with single monitor setups.
 
 Project home: https://github.com/kiran86/MaximizeWindowLikeMac
 
