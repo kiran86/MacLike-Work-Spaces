@@ -1,11 +1,11 @@
 {
-  "name": "maximize-window-into-new-workspace",
+  "name": "maximize-window-like-mac",
   "version": "1.0.0",
   "license": "GPL-3.0",
   "type": "module",
   "private": true,
   "scripts": {
-    "lint": "eslint MaximizeWindowIntoNewWorkspace/"
+    "lint": "eslint MaximizeWindowLikeMac/"
   },
   "devDependencies": {
     "ci-run-eslint": "git+https://gitlab.gnome.org/World/javascript/ci-run-eslint.git#f94b653606476d151439793ab8a8a93aa4a146de",
