@@ -1,6 +1,6 @@
 #!/bin/sh
 
-NAME=MaximizeWindowLikeMac
+NAME=MacLike(Work)Spaces
 cd $NAME
 zip -r $NAME.zip *
 mv $NAME.zip ../..

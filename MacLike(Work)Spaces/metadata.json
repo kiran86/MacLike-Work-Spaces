@@ -1,8 +1,8 @@
 {
-  "name": "MaximizeWindowLikeMac",
+  "name": "MacLike(Work)Spaces",
   "description": "Workspace 1 is reserved for small windows. Maximized windows move into their own workspaces starting at workspace 2.",
   "url": "https://github.com/kiran86/MaximizeWindowLikeMac",
-  "uuid": "MaximizeWindowLikeMac@kiran86.com",
+  "uuid": "MacLikeWorkSpaces@kiran86.com",
   "shell-version": [
     "46",
     "47",

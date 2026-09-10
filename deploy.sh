@@ -1,7 +1,7 @@
 #!/bin/sh
 
-NAME=MaximizeWindowLikeMac
-UUID=MaximizeWindowLikeMac@kiran86.com
+NAME=MacLike(Work)Spaces
+UUID=MacLike(Work)Spaces@kiran86.com
 OLD_UUID=MaximizeWindowIntoNewWorkspace@kyleross.com
 EXTENSIONS_DIR="$HOME/.local/share/gnome-shell/extensions"
 
