@@ -76,6 +76,7 @@ export default class Extension {
         const workspaceInfo = {
             sourceWorkspace,
             dedicatedWorkspace,
+            monitor: mMonitor
         };
         _windowidsMaximized[win.get_id()] = workspaceInfo;
         this._dedicatedWorkspaces.add(dedicatedWorkspace);
@@ -123,7 +124,10 @@ export default class Extension {
             this._workspacesPendingCleanup.delete(workspaceInfo.dedicatedWorkspace);
 
             const {dedicatedWorkspace, sourceWorkspace} = workspaceInfo;
-            const windows = dedicatedWorkspace.list_windows().filter(w => !w.is_always_on_all_workspaces());
+            const windows = dedicatedWorkspace.list_windows().filter(w =>
+                !w.is_always_on_all_workspaces() &&
+                w.get_monitor() === workspaceInfo.monitor
+            );
             if (dedicatedWorkspace.index() === 0)
                 return;
             if (windows.length > 0)
