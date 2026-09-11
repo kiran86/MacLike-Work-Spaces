@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NAME='MacLike(Work)Spaces'
-UUID='MacLike(Work)Spaces@kiran86.com'
+UUID='maclike-work-spaces@kiran86.com'
 OLD_UUID='MaximizeWindowIntoNewWorkspace@kyleross.com'
 LEGACY_UUID='MacLikeWorkSpaces@kiran86.com'
 LEGACY_OLD_UUID='MaximizeWindowLikeMac@kiran86.com'

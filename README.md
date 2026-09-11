@@ -2,7 +2,7 @@
 
 I'm a big fan of the MacOS window management behavior, where maximizing a window moves it to its own workspace. Although it cannot be exactly replicated in GNOME, this extension provides a similar experience.
 
-I previously used [balintbarna's version](https://github.com/balintbarna/gnome-shell-extension-maximize-to-empty-workspace)and loved it. However, I wanted to make a few changes to the behavior, so I created this fork. Shout out to [balintbarna](https://github.com/balintbarna) for the original work.
+This project is a fork of [balintbarna's maximize-to-empty-workspace extension](https://github.com/balintbarna/gnome-shell-extension-maximize-to-empty-workspace). It adapts and extends that original work for newer GNOME versions and adds the workspace behavior described below. The original author is credited here, and this project remains under the GNU GPL v3 license.
 
 ## Description
 Using **Fixed number of workspaces** options, Workspace 1 is reserved for Files and other small, non-maximized windows.
@@ -24,4 +24,4 @@ moved to workspace 1 and focused there.
 
 
 
-This is a fork of [balintbarna's version](https://github.com/balintbarna/gnome-shell-extension-maximize-to-empty-workspace), updated to support Gnome 49+.
+This is a fork of [balintbarna's version](https://github.com/balintbarna/gnome-shell-extension-maximize-to-empty-workspace), updated to support GNOME 49+ and released under the GNU GPL v3 license.
