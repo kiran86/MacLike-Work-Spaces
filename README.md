@@ -20,7 +20,8 @@ This extension is designed for a fixed workspace layout with one base workspace:
 4. Also select **Workspaces on primary display only** if you have multiple monitors.
 
 Workspace 1 is then kept for Files and other small windows. Maximized windows are placed in temporary workspaces starting at workspace 2, which are removed again after their windows close. Newly launched non-maximized windows are
-moved to workspace 1 and focused there.
+moved to workspace 1 and focused there. The GNOME top panel is shown only on
+workspace 1 and hidden on dedicated app workspaces.
 
 
 

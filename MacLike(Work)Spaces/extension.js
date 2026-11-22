@@ -252,6 +252,30 @@ export default class Extension {
     }
 
     window_manager_switch_workspace() {
+        this.updatePanelVisibility();
+    }
+
+    updatePanelVisibility() {
+        const manager = global.display.get_workspace_manager();
+        const isHomeWorkspace = manager.get_active_workspace_index() === 0;
+        if (isHomeWorkspace) {
+            if (this._panelChromeRemoved) {
+                Main.layoutManager.addChrome(Main.layoutManager.panelBox, {
+                    affectsStruts: true,
+                    trackFullscreen: true,
+                });
+                this._panelChromeRemoved = false;
+            }
+            Main.layoutManager.panelBox.show();
+        } else {
+            // Hiding alone leaves the panel's strut in the work area. Remove
+            // it from Shell chrome so maximized windows can use the full height.
+            if (!this._panelChromeRemoved) {
+                Main.layoutManager.removeChrome(Main.layoutManager.panelBox);
+                this._panelChromeRemoved = true;
+            }
+            Main.layoutManager.panelBox.hide();
+        }
     }
 
     enable() {
@@ -259,6 +283,7 @@ export default class Extension {
         this._workspaceCleanupTimeoutIds = new Set();
         this._workspacesPendingCleanup = new Set();
         this._dedicatedWorkspaces = new Set();
+        this._panelChromeRemoved = false;
         _startupComplete = false;
         // Delay extension activation to prevent workspace reordering during session startup
         this._startupTimeoutId = setTimeout(() => {
@@ -318,6 +343,7 @@ export default class Extension {
             },
             this
         );
+        this.updatePanelVisibility();
     }
 
     disable() {
@@ -343,6 +369,14 @@ export default class Extension {
 
         Main.overview.disconnectObject(this);
         global.window_manager.disconnectObject(this);
+        if (this._panelChromeRemoved) {
+            Main.layoutManager.addChrome(Main.layoutManager.panelBox, {
+                affectsStruts: true,
+                trackFullscreen: true,
+            });
+            this._panelChromeRemoved = false;
+        }
+        Main.layoutManager.panelBox.show();
 
         _startupComplete = false;
         this._mutterSettings = null;
