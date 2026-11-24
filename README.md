@@ -23,6 +23,10 @@ Workspace 1 is then kept for Files and other small windows. Maximized windows ar
 moved to workspace 1 and focused there. The GNOME top panel is shown only on
 workspace 1 and hidden on dedicated app workspaces.
 
+If GNOME Shell reloads while the screen is locked, the extension rescans
+existing maximized and fullscreen windows after unlock so their dedicated
+workspaces can still be cleaned up when they close.
+
 
 
 This is a fork of [balintbarna's version](https://github.com/balintbarna/gnome-shell-extension-maximize-to-empty-workspace), updated to support GNOME 49+ and released under the GNU GPL v3 license.

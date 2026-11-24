@@ -73,20 +73,51 @@ export default class Extension {
         }
 
         const dedicatedWorkspace = manager.get_workspace_by_index(targetIndex);
-        const workspaceInfo = {
+        this.trackDedicatedWindow(win, sourceWorkspace, dedicatedWorkspace);
+        win.change_workspace_by_index(targetIndex, false);
+        dedicatedWorkspace.activate_with_focus(win, global.get_current_time());
+    }
+
+    trackDedicatedWindow(win, sourceWorkspace, dedicatedWorkspace) {
+        _windowidsMaximized[win.get_id()] = {
             sourceWorkspace,
             dedicatedWorkspace,
-            monitor: mMonitor
+            monitor: win.get_monitor(),
         };
-        _windowidsMaximized[win.get_id()] = workspaceInfo;
+
+        if (this._dedicatedWorkspaces.has(dedicatedWorkspace))
+            return;
+
         this._dedicatedWorkspaces.add(dedicatedWorkspace);
         const display = win.get_display();
         dedicatedWorkspace.connectObject('window-removed', (_, removedWin) => {
-            if (removedWin === win)
+            const workspaceInfo = _windowidsMaximized[removedWin.get_id()];
+            if (workspaceInfo?.dedicatedWorkspace === dedicatedWorkspace) {
+                delete _windowidsMaximized[removedWin.get_id()];
                 this.removeEmptyDedicatedWorkspace(display, workspaceInfo);
+            }
         }, this);
-        win.change_workspace_by_index(targetIndex, false);
-        dedicatedWorkspace.activate_with_focus(win, global.get_current_time());
+    }
+
+    recoverDedicatedWindows() {
+        if (!_startupComplete)
+            return;
+
+        const manager = global.display.get_workspace_manager();
+        const homeWorkspace = manager.get_workspace_by_index(0);
+        for (let i = 1; i < manager.get_n_workspaces(); i++) {
+            const workspace = manager.get_workspace_by_index(i);
+            for (const win of workspace.list_windows()) {
+                const isMaximized = win.maximized_horizontally && win.maximized_vertically;
+                const isFullscreen = win.is_fullscreen();
+                if (win.window_type !== Meta.WindowType.NORMAL ||
+                    win.is_always_on_all_workspaces() || win.skip_taskbar ||
+                    win.get_transient_for() || (!isMaximized && !isFullscreen))
+                    continue;
+
+                this.trackDedicatedWindow(win, homeWorkspace, workspace);
+            }
+        }
     }
 
     restoreToSourceWorkspace(win) {
@@ -94,7 +125,6 @@ export default class Extension {
         if (!workspaceInfo)
             return;
 
-        delete _windowidsMaximized[win.get_id()];
         win.change_workspace(workspaceInfo.sourceWorkspace);
         workspaceInfo.sourceWorkspace.activate_with_focus(win, global.get_current_time());
         this.removeEmptyDedicatedWorkspace(win.get_display(), workspaceInfo);
@@ -180,7 +210,6 @@ export default class Extension {
             return;
 
         const workspaceInfo = _windowidsMaximized[win.get_id()];
-        delete _windowidsMaximized[win.get_id()];
         if (workspaceInfo)
             this.removeEmptyDedicatedWorkspace(win.get_display(), workspaceInfo);
     }
@@ -302,6 +331,7 @@ export default class Extension {
             // Clear the pending list
             for (const winId in _windowidsPendingStartup)
                 delete _windowidsPendingStartup[winId];
+            this.recoverDedicatedWindows();
         }, 10000);
         // Listen for overview hidden to process pending windows
         Main.overview.connectObject('hidden', () => {
@@ -317,6 +347,9 @@ export default class Extension {
             // Clear the pending list
             for (const winId in _windowidsPendingOverview)
                 delete _windowidsPendingOverview[winId];
+        }, this);
+        Main.sessionMode.connectObject('updated', () => {
+            setTimeout(() => this.recoverDedicatedWindows(), 250);
         }, this);
         // Trigger new window with maximize size and if the window is maximized
         global.window_manager.connectObject(
@@ -368,6 +401,7 @@ export default class Extension {
         this._dedicatedWorkspaces.clear();
 
         Main.overview.disconnectObject(this);
+        Main.sessionMode.disconnectObject(this);
         global.window_manager.disconnectObject(this);
         if (this._panelChromeRemoved) {
             Main.layoutManager.addChrome(Main.layoutManager.panelBox, {
